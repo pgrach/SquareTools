@@ -1,0 +1,13 @@
+SquareTools
+I live in a gated development in London consisting of 114 Live/Work duplex residential units called "Red Square". 
+The residents creating enough critical mass to promote the inter-provision of services within the working community, 
+sharing, nice neighbourhood, a lot of families with kids. 
+
+I am learning a full stack developer. I need to build something utilising Python and SQLite. The scope should not be 
+too complex, but still I hope it is useful and ideally building up on this potential of having a lot of engaged neighbours, 
+professionals, families in the Red Square.
+
+Resource Sharing Platform
+An application to facilitate the sharing of resources among residents: starting with sharing tools, appliances, or other equipment.
+Later we potentially I can build car pooling / neighbourhood.
+
