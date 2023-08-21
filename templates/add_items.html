@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Item</title>
+</head>
+<body>
+    <!DOCTYPE html>
+<html>
+<head>
+    <title>Add Item</title>
+</head>
+<body>
+    <h2>Add Items</h2>
+    <form action="/add_items" method="post">
+        <label for="flat">Flat#:</label>
+        <input type="text" name="flatID" required><br><br>
+        <label for="fname">Name:</label>
+        <input type="text" name="fname" required><br><br>    
+        <label for="class">Class:</label>
+        <input type="text" name="class" required><br><br>
+        <label for="item_name">Item Name:</label>
+        <input type="text" name="item_name" required><br><br>
+        <label for="availability">Availability:</label>
+        <input type="text" name="availability" required><br><br>    
+        <input type="submit" value="Add Item">
+    </form>
+</body>
+
+<a href="{{ url_for('home') }}">Go BACK to MAIN MENU </a>
+
+</html>
+
+    
+</body>
+</html>
