@@ -1,21 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <title>Squared_Share</title>
 </head>
+
 <body>
-    <h1>Welcome to Squared Share</h1>
-    <ul>
-        <li><a href="{{ url_for('view_items') }}">View All Items</a></li>
-        <li><a href="{{ url_for('view_members') }}">View Members</a></li>
-        <li><a href="{{ url_for('add_items') }}">Add Items</a></li>
-        <li><a href="{{ url_for('update_item') }}">Update Item</a></li>
 
-        <!-- this should only be for admin -->
-        <li><a href="{{ url_for('delete') }}">Delete</a></li>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Squared Share</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="{{ url_for('view_items') }}">View All Items</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('view_members') }}">View Members</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('add_items') }}">Add Items</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('update_item') }}">Update Item</a>
+                </li>
+                <!-- Admin-only link -->
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('delete') }}">Delete</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
 
+    <!-- Jumbotron -->
+    <div class="container mt-5">
+        <div class="jumbotron">
+            <h1 class="display-4">Welcome to Squared Share!</h1>
+            <p class="lead">Join our community in sharing and borrowing items. Add yours now!</p>
+            <hr class="my-4">
+            <p>Click below to add an item to the community pool.</p>
+            <a class="btn btn-primary btn-lg" href="{{ url_for('add_items') }}" role="button">Add Item</a>
+        </div>
+    </div>
 
+    <!-- Optional: jQuery library, Popper.js, and Bootstrap JS for some Bootstrap components like modals -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
+
 </html>

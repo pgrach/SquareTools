@@ -4,29 +4,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <title>Add Item</title>
 </head>
 
 <body>
-    <h2>Add Items</h2>
-    <form action="/add_items" method="post"> <!-- data is sent via a POST request to the /add_items endpoint. -->
-        <label for="flat">Flat#:</label>
-        <input type="text" name="flatID" required><br><br>
-        <label for="fname">Name:</label>
-        <input type="text" name="fname" required><br><br>
-        <label for="class">Class:</label>
-        <input type="text" name="class" required><br><br>
-        <label for="item_name">Item Name:</label>
-        <input type="text" name="item_name" required><br><br>
-        <input type="submit" value="Add Item">
-    </form>
-</body>
 
-<a href="{{ url_for('home') }}">Go BACK to MAIN MENU </a>
+    <div class="container mt-5">
+        <h2>Add Items</h2>
+        <form action="/add_items" method="post" class="mt-4"> <!-- data is sent via a POST request to the /add_items endpoint. -->
+            <div class="form-group">
+                <label for="flat">Flat#:</label>
+                <input type="text" class="form-control" name="flatID" required>
+            </div>
+            <div class="form-group">
+                <label for="fname">Name:</label>
+                <input type="text" class="form-control" name="fname" required>
+            </div>
+            <div class="form-group">
+                <label for="class">Class:</label>
+                <input type="text" class="form-control" name="class" required>
+            </div>
+            <div class="form-group">
+                <label for="item_name">Item Name:</label>
+                <input type="text" class="form-control" name="item_name" required>
+            </div>
+            <input type="submit" value="Add Item" class="btn btn-primary">
+        </form>
 
-</html>
+        <a href="{{ url_for('home') }}" class="btn btn-secondary mt-3">Go BACK to MAIN MENU </a>
+    </div>
 
-
+    <!-- Optional: jQuery library, Popper.js, and Bootstrap JS for some Bootstrap components like modals -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 
 </html>

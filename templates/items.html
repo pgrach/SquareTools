@@ -1,40 +1,103 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Items</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>Items</title>
 </head>
+
 <body>
-  <h2>Items</h2>
-  <table border="1">
-    <tr>
-      <th>Item ID</th>
-      <th>Flat ID</th>
-      <th>Member ID</th>
-      <th>Class</th>
-      <th>Item Name</th>
-      <th>Availability</th>
-      <th>borrower_name</th>
-      <th>borrower_flatID</th>
-    </tr>
-    {% for item in items %}
-    <tr>
-      <td>{{ item[0] }}</td>
-      <td>{{ item[1] }}</td>
-      <td>{{ item[2] }}</td>
-      <td>{{ item[3] }}</td>
-      <td>{{ item[4] }}</td>
-      <td>{{ item[5] }}</td>
-      <td>{{ item[6] }}</td>
-      <td>{{ item[7] }}</td>
 
-    </tr>
-    {% endfor %}
-  </table>
-  
-  <a href="{{ url_for('home') }}">Go BACK to MAIN MENU </a>
+    <div class="container mt-5">
+        <h2>Items</h2>
 
+        <div class="row mt-4">
+            {% for item in items %}
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <!-- Display item details here -->
+                    <div class="card-body">
+                        <h5 class="card-title">{{ item[4] }}</h5> <!-- Item Name -->
+                        <p class="card-text">
+                            Owner: {{ item[2] }} (Flat {{ item[1] }})<br>
+                            Category: {{ item[3] }}<br>
+                            Availability: {{ item[5] }}
+                            {% if item[5] == "Borrowed" %}
+                            <br>Borrowed By: {{ item[6] }} (Flat {{ item[7] }})
+                            {% endif %}
+                        </p>
+                        <button class="btn btn-secondary" onclick="toggleUpdateForm({{ loop.index }})">Update Item</button>
+                    </div>
+
+                    <!-- Update form hidden by default -->
+                    <div class="card-body update-form" id="update-form-{{ loop.index }}" style="display:none;">
+                        <form action="{{ url_for('update_item') }}" method="post">
+                            <input type="hidden" name="itemID" value="{{ item[0] }}">
+                            <div class="form-group">
+                                <label for="availability-{{ loop.index }}">Availability:</label>
+                                <select class="form-control" name="availability" id="availability-{{ loop.index }}">
+                                    <option value="available">Available</option>
+                                    <option value="Borrowed">Borrowed</option>
+                                </select>
+                            </div>
+                            <div class="borrower-details" style="display:none;">
+                                <div class="form-group">
+                                    <label for="borrower_name">Borrower Name:</label>
+                                    <input type="text" class="form-control" name="borrower_name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="borrower_flatID">Borrower Flat ID:</label>
+                                    <input type="number" class="form-control" name="borrower_flatID" min="1" max="144">
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <a href="{{ url_for('home') }}" class="btn btn-secondary mt-3">Go BACK to MAIN MENU </a>
+    </div>
+
+    <script>
+        function toggleUpdateForm(index) {
+            const form = document.getElementById("update-form-" + index);
+            form.style.display = form.style.display === "none" ? "block" : "none";
+        }
+
+        document.querySelectorAll("[id^=availability-]").forEach(function(element) {
+            element.onchange = function() {
+                const details = this.parentElement.nextElementSibling;
+                if (this.value == "Borrowed") {
+                    details.style.display = "block";
+                } else {
+                    details.style.display = "none";
+                }
+            }
+        });
+
+        document.querySelectorAll("form").forEach(function(form) {
+            form.addEventListener("submit", function(e) {
+                const flatIDInput = form.querySelector("[name='borrower_flatID']");
+                const flatIDValue = parseInt(flatIDInput.value, 10);
+                if (flatIDValue < 1 || flatIDValue > 144) {
+                    alert("Please insert the correct flat number");
+                    e.preventDefault(); // Prevent form submission
+                }
+            });
+        });
+    </script>
+
+    <!-- Optional: jQuery library, Popper.js, and Bootstrap JS for some Bootstrap components like modals -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
+
 </html>
