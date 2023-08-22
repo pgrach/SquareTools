@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Members</title>
+</head>
+<body>
+  <h2>Members</h2>
+  <table border="1">
+    <tr>
+      <th>Flat ID</th>
+      <th>MemberID</th>
+      <th>Name</th>
+    </tr>
+    {% for member in members %}
+    <tr>
+      <td>{{ member[0] }}</td>
+      <td>{{ member[1] }}</td>
+      <td>{{ member[2] }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+  
+  <a href="{{ url_for('home') }}">Go BACK to MAIN MENU </a>
+
+</body>
+</html>
