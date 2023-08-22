@@ -39,6 +39,8 @@ CREATE TABLE IF NOT EXISTS "items" (
 "class" VARCHAR (10),
 "item_name" VARCHAR (50),
 "availability" VARCHAR (20),
+"borrower_name" TEXT,
+"borrower_flatID" INTEGER,
 FOREIGN KEY (flatID) REFERENCES flats (flatID),
 FOREIGN KEY (memberID) REFERENCES members (memberID)
 )""")
@@ -84,7 +86,7 @@ def add_items():
         fname = request.form["fname"]
         classn = request.form["class"]
         item = request.form["item_name"]
-        availability = request.form["availability"]
+        availability = "Available" # Set available by default whenever user adds it to the database.
         
         conn, cursor = get_db_connection()
 
@@ -107,7 +109,7 @@ def add_items():
             memberID = existing_member[1]  # Fetch the memberID of the existing member
 
         # Insert into items
-        cursor.execute("INSERT INTO items (flatID, memberID, class, item_name, availability) VALUES (?, ?, ?, ?, ?)", (flat, memberID, classn, item, availability))
+        cursor.execute("INSERT INTO items (flatID, memberID, class, item_name, availability, borrower_name, borrower_flatID) VALUES (?, ?, ?, ?, ?, NULL, NULL)", (flat, memberID, classn, item, availability))
 
         conn.commit()
         conn.close()
@@ -141,6 +143,35 @@ def delete():
         return redirect(url_for('home'))
     
     return render_template('delete.html')
+
+@app.route('/update_item', methods=['GET', 'POST'])
+def update_item():
+    if request.method == 'POST':
+        itemID = request.form['itemID']
+        availability = request.form['availability']
+        borrower_name = request.form.get('borrower_name')
+        borrower_flatID = request.form.get('borrower_flatID')
+
+        conn, cursor = get_db_connection()
+
+        # Check if member exists for the borrowing flat
+        cursor.execute("SELECT * FROM members WHERE flatID = ? AND fname = ?", (borrower_flatID, borrower_name))
+        existing_member = cursor.fetchone()
+
+        # If the member doesn't exist, add them
+        if not existing_member and borrower_name and borrower_flatID:
+            cursor.execute("INSERT INTO members (flatID, fname) VALUES (?, ?)", (borrower_flatID, borrower_name))
+
+        # Update the item's availability
+        cursor.execute("UPDATE items SET availability = ?, borrower_name = ?, borrower_flatID = ? WHERE itemID = ?",
+                       (availability, borrower_name, borrower_flatID, itemID))
+
+        conn.commit()
+        conn.close()
+
+        return redirect(url_for('home'))
+
+    return render_template("update_item.html")
 
 if __name__ == '__main__':
     app.run(debug=True)

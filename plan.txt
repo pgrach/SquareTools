@@ -9,5 +9,5 @@ professionals, families in the Red Square.
 
 Resource Sharing Platform
 An application to facilitate the sharing of resources among residents: starting with sharing tools, appliances, or other equipment.
-Later we potentially I can build car pooling / neighbourhood.
+Later we can potentially build a car pooling system amongst neighbours.
 

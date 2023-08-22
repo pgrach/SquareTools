@@ -8,33 +8,23 @@
 </head>
 
 <body>
-    <!DOCTYPE html>
-    <html>
+    <h2>Add Items</h2>
+    <form action="/add_items" method="post"> <!-- data is sent via a POST request to the /add_items endpoint. -->
+        <label for="flat">Flat#:</label>
+        <input type="text" name="flatID" required><br><br>
+        <label for="fname">Name:</label>
+        <input type="text" name="fname" required><br><br>
+        <label for="class">Class:</label>
+        <input type="text" name="class" required><br><br>
+        <label for="item_name">Item Name:</label>
+        <input type="text" name="item_name" required><br><br>
+        <input type="submit" value="Add Item">
+    </form>
+</body>
 
-    <head>
-        <title>Add Item</title>
-    </head>
+<a href="{{ url_for('home') }}">Go BACK to MAIN MENU </a>
 
-    <body>
-        <h2>Add Items</h2>
-        <form action="/add_items" method="post"> <!-- data is sent via a POST request to the /add_items endpoint. -->
-            <label for="flat">Flat#:</label>
-            <input type="text" name="flatID" required><br><br>
-            <label for="fname">Name:</label>
-            <input type="text" name="fname" required><br><br>
-            <label for="class">Class:</label>
-            <input type="text" name="class" required><br><br>
-            <label for="item_name">Item Name:</label>
-            <input type="text" name="item_name" required><br><br>
-            <label for="availability">Availability:</label>
-            <input type="text" name="availability" required><br><br>
-            <input type="submit" value="Add Item">
-        </form>
-    </body>
-
-    <a href="{{ url_for('home') }}">Go BACK to MAIN MENU </a>
-
-    </html>
+</html>
 
 
 </body>
