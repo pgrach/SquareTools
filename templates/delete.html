@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete</title>
+</head>
+
+<body>
+    <h2>Delete Item</h2>
+    <form action="{{ url_for('delete') }}" method="post">
+        <input type="hidden" name="delete_type" value="item">
+        <label for="itemID">Item ID:</label>
+        <input type="text" name="itemID" required>
+        <input type="submit" value="Delete Item">
+    </form>
+
+    <h2>Delete Member</h2>
+    <form action="{{ url_for('delete') }}" method="post">
+        <input type="hidden" name="delete_type" value="member">
+        <label for="memberID">Member ID:</label>
+        <input type="text" name="memberID" required>
+        <input type="submit" value="Delete Member">
+    </form>
+
+    <a href="{{ url_for('home') }}">Go BACK to MAIN MENU </a>
+
+</body>
+
+</html>

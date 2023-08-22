@@ -35,10 +35,12 @@ cursor.execute("""
 CREATE TABLE IF NOT EXISTS "items" (
 "itemID" INTEGER PRIMARY KEY AUTOINCREMENT,
 "flatID" INTEGER NOT NULL,
+"memberID" INTEGER NOT NULL,               
 "class" VARCHAR (10),
 "item_name" VARCHAR (50),
 "availability" VARCHAR (20),
-FOREIGN KEY (flatID) REFERENCES flats (flatID)
+FOREIGN KEY (flatID) REFERENCES flats (flatID),
+FOREIGN KEY (memberID) REFERENCES members (memberID)
 )""")
 
 # Create the items table
@@ -99,9 +101,13 @@ def add_items():
         # If the member doesn't exist, add them
         if not existing_member:
             cursor.execute("INSERT INTO members (flatID, fname) VALUES (?, ?)", (flat, fname))
+            memberID = cursor.lastrowid  # Fetch the ID of the member you just added
+
+        else:
+            memberID = existing_member[1]  # Fetch the memberID of the existing member
 
         # Insert into items
-        cursor.execute("INSERT INTO items (flatID, class, item_name, availability) VALUES (?, ?, ?, ?)", (flat, classn, item, availability))
+        cursor.execute("INSERT INTO items (flatID, memberID, class, item_name, availability) VALUES (?, ?, ?, ?, ?)", (flat, memberID, classn, item, availability))
 
         conn.commit()
         conn.close()
@@ -109,6 +115,32 @@ def add_items():
         return redirect(url_for('home'))  # Redirect to the main page after adding
 
     return render_template("add_items.html")
+
+
+@app.route('/delete', methods=['GET', 'POST'])
+def delete():
+    if request.method == 'POST':
+        delete_type = request.form['delete_type']
+        
+        conn, cursor = get_db_connection()
+
+        if delete_type == 'item':
+            itemID = request.form['itemID']
+            cursor.execute("DELETE FROM items WHERE itemID = ?", (itemID,))
+
+        elif delete_type == 'member':
+            memberID = request.form['memberID']
+            cursor.execute("SELECT flatID FROM members WHERE memberID = ?", (memberID,))
+            flatID = cursor.fetchone()
+            cursor.execute("DELETE FROM items WHERE flatID = ?", (flatID[0],))
+            cursor.execute("DELETE FROM members WHERE memberID = ?", (memberID,))
+
+        conn.commit()
+        conn.close()
+
+        return redirect(url_for('home'))
+    
+    return render_template('delete.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
