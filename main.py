@@ -73,8 +73,15 @@ def view_members():
 @app.route("/items")
 def view_items():
   conn, cursor = get_db_connection()
-  cursor.execute("SELECT * FROM items")
+
+  # Join items table with members table to get the fname for each item's owner
+  cursor.execute("""
+SELECT items.*, members.fname 
+FROM items
+JOIN members ON items.memberID = members.memberID
+""")
   items = cursor.fetchall()
+#   print(items) #checking if JOIN works and defining the order
   conn.close()
   return render_template("items.html", items=items)
 
