@@ -1,4 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
+from werkzeug.utils import secure_filename
+import os
 
 # created an instance of the Flask application 
 app = Flask(__name__)
@@ -41,6 +43,7 @@ CREATE TABLE IF NOT EXISTS "items" (
 "availability" VARCHAR (20),
 "borrower_name" TEXT,
 "borrower_flatID" INTEGER,
+"image_filename" TEXT,
 FOREIGN KEY (flatID) REFERENCES flats (flatID),
 FOREIGN KEY (memberID) REFERENCES members (memberID)
 )""")
@@ -86,6 +89,17 @@ JOIN members ON items.memberID = members.memberID
   return render_template("items.html", items=items)
 
 # add a new item to the db
+
+# Here we define where we save the items images:
+UPLOAD_FOLDER = 'static/uploads'
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+# Check for allowed file extensions
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 @app.route("/add_items", methods=["GET", "POST"])
 def add_items():
     if request.method == "POST":
@@ -118,6 +132,25 @@ def add_items():
         # Insert into items
         cursor.execute("INSERT INTO items (flatID, memberID, class, item_name, availability, borrower_name, borrower_flatID) VALUES (?, ?, ?, ?, ?, NULL, NULL)", (flat, memberID, classn, item, availability))
 
+        # Get the itemID of the newly inserted item
+        itemID = cursor.lastrowid
+
+        # Check if the post request has the file part
+        if 'item_image' in request.files:
+            file = request.files['item_image']
+            # If the user does not select a file, the browser might
+            # submit an empty file without a filename.
+            if file.filename == '':
+                return redirect(request.url)
+            if file and allowed_file(file.filename):
+                extension = file.filename.rsplit('.', 1)[1].lower()  # Get the file extension
+                new_filename = f"{itemID}.{extension}"  # Rename file to itemID.extension
+                file_path = os.path.join(app.config['UPLOAD_FOLDER'], new_filename)
+                file.save(file_path)
+
+                # Update the items table with the image filename
+                cursor.execute("UPDATE items SET image_filename = ? WHERE itemID = ?", (new_filename, itemID))
+
         conn.commit()
         conn.close()
         
@@ -135,6 +168,14 @@ def delete():
 
         if delete_type == 'item':
             itemID = request.form['itemID']
+
+            # Fetch the filename from the database
+            cursor.execute("SELECT image_filename FROM items WHERE itemID = ?", (itemID,))
+            result = cursor.fetchone()
+            if result and result[0]:
+                image_filename = result[0]
+                os.remove(os.path.join(app.config['UPLOAD_FOLDER'], image_filename))  # Delete the image from the file system
+
             cursor.execute("DELETE FROM items WHERE itemID = ?", (itemID,))
 
         elif delete_type == 'member':

@@ -13,7 +13,7 @@
 
     <div class="container mt-5">
         <h2>Add Items</h2>
-        <form action="/add_items" method="post" class="mt-4"> <!-- data is sent via a POST request to the /add_items endpoint. -->
+        <form action="{{ url_for('add_items') }}" method="post" enctype="multipart/form-data" class="mt-4">
             <div class="form-group">
                 <label for="flat">Flat#:</label>
                 <input type="text" class="form-control" name="flatID" required>
@@ -30,9 +30,14 @@
                 <label for="item_name">Item Name:</label>
                 <input type="text" class="form-control" name="item_name" required>
             </div>
+            <!-- field for file/image upload -->
+            <div class="form-group">
+                <label for="item_image">Item Image:</label>
+                <input type="file" class="form-control" name="item_image" accept="image/*">
+            </div>
             <input type="submit" value="Add Item" class="btn btn-primary">
         </form>
-
+    
         <a href="{{ url_for('home') }}" class="btn btn-secondary mt-3">Go BACK to MAIN MENU </a>
     </div>
 

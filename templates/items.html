@@ -21,10 +21,11 @@
       <div class="col-md-4 mb-4">
         <div class="card">
           <!-- Display item details here -->
+          <img class="card-img-top" src="{{ url_for('static', filename='uploads/' + item[8]) }}" alt="Item Image" onerror="this.style.display='none'">
           <div class="card-body">
             <h5 class="card-title">{{ item[4] }}</h5> <!-- Item Name -->
             <p class="card-text">
-              Owner: {{ item[8] }} (Flat {{ item[1] }})<br>
+              Owner: {{ item[9] }} (Flat {{ item[1] }})<br>
               Category: {{ item[3] }}<br>
               Availability: {{ item[5] }}
               {% if item[5] == "Borrowed" %}
@@ -33,7 +34,7 @@
             </p>
             {% if item[5] == "Borrowed" %}
             <button class="btn btn-secondary"
-              onclick="if(confirmReturn('{{ item[4] }}', '{{ item[8] }}', '{{ item[1] }}')) { toggleUpdateForm({{ loop.index }}); }">Return
+                onclick="if(confirmReturn('{{ item[4] }}', '{{ item[9] }}', '{{ item[1] }}', '{{ item[7] }}')) { toggleUpdateForm({{ loop.index }}); }">Return
               </button>
             {% else %}
             <button class="btn btn-secondary" onclick="toggleUpdateForm({{ loop.index }})">Borrow</button>
@@ -96,8 +97,8 @@
       });
     });
 
-    function confirmReturn(itemName, ownerName, flatID) {
-      return confirm(`Are you sure you are a borrower from flat Flat ${flatID} wishing to return ${itemName} to ${ownerName} from Flat ${flatID}?`);
+    function confirmReturn(itemName, ownerName, flatID, borrowerFlatID) {
+      return confirm(`Are you sure you are a borrower from Flat ${borrowerFlatID} wishing to return ${itemName} to ${ownerName} from Flat ${flatID}?`);
     }
   </script>
 
