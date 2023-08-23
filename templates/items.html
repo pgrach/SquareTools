@@ -21,7 +21,11 @@
       <div class="col-md-4 mb-4">
         <div class="card">
           <!-- Display item details here -->
-          <img class="card-img-top" src="{{ url_for('static', filename='uploads/' + item[8]) }}" alt="Item Image" onerror="this.style.display='none'">
+          {% if item[8] and item[8] != "" %}
+            <img class="card-img-top" src="{{ url_for('static', filename='uploads/' + item[8]) }}" alt="Item Image" onerror="this.style.display='none'">
+          {% endif %}
+          
+          <!-- Always display item details -->
           <div class="card-body">
             <h5 class="card-title">{{ item[4] }}</h5> <!-- Item Name -->
             <p class="card-text">

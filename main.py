@@ -7,6 +7,9 @@ app = Flask(__name__)
 
 import sqlite3 as sql
 
+# Define the secret key value (functionality available for Admin only)
+SECRET_KEY_VALUE = "MY_SECRET_123"  # Placeholder; user should replace with a unique value
+
 # Define a Function to establish a new connection to the database
 def get_db_connection():
     dbCon = sql.connect("square_share.db") #connection object
@@ -52,6 +55,7 @@ FOREIGN KEY (memberID) REFERENCES members (memberID)
 conn.commit()
 conn.close()
 
+
 # CRUD:
 # Add Items
 # Delete Items
@@ -65,13 +69,20 @@ conn.close()
 def home():
     return render_template("index.html")
 
+
+# This is only available for Admin
+
 @app.route("/members")
 def view_members():
-  conn, cursor = get_db_connection()
-  cursor.execute("SELECT * FROM members")
-  members = cursor.fetchall()
-  conn.close()
-  return render_template("members.html", members=members)
+    secret_key = request.args.get('secret_key')
+    if secret_key != SECRET_KEY_VALUE:
+        return redirect(url_for("home"))
+
+    conn, cursor = get_db_connection()
+    cursor.execute("SELECT * FROM members")
+    members = cursor.fetchall()
+    conn.close()
+    return render_template("members.html", members=members)
 
 @app.route("/items")
 def view_items():
@@ -138,11 +149,8 @@ def add_items():
         # Check if the post request has the file part
         if 'item_image' in request.files:
             file = request.files['item_image']
-            # If the user does not select a file, the browser might
-            # submit an empty file without a filename.
-            if file.filename == '':
-                return redirect(request.url)
-            if file and allowed_file(file.filename):
+            # If the user selects a file and it's an allowed type, save it.
+            if file.filename != '' and allowed_file(file.filename):
                 extension = file.filename.rsplit('.', 1)[1].lower()  # Get the file extension
                 new_filename = f"{itemID}.{extension}"  # Rename file to itemID.extension
                 file_path = os.path.join(app.config['UPLOAD_FOLDER'], new_filename)
@@ -153,14 +161,15 @@ def add_items():
 
         conn.commit()
         conn.close()
-        
+
         return redirect(url_for('home'))  # Redirect to the main page after adding
-
-    return render_template("add_items.html")
-
+    return render_template("add_items.html")  # Render the form when the request method is "GET"
 
 @app.route('/delete', methods=['GET', 'POST'])
 def delete():
+    secret_key = request.args.get('secret_key')
+    if secret_key != SECRET_KEY_VALUE:
+        return redirect(url_for("home"))
     if request.method == 'POST':
         delete_type = request.form['delete_type']
         

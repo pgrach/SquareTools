@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -22,18 +23,16 @@
                 <li class="nav-item active">
                     <a class="nav-link" href="{{ url_for('view_items') }}">View All Items</a>
                 </li>
+                {% if request.args.get('secret_key') == 'MY_SECRET_123' %}
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('view_members') }}">View Members</a>
+                    <a class="nav-link" href="{{ url_for('view_members') }}?secret_key=MY_SECRET_123">View Members</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('delete') }}?secret_key=MY_SECRET_123">Delete</a>
+                </li>
+                {% endif %}
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url_for('add_items') }}">Add Items</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('update_item') }}">Update Item</a>
-                </li>
-                <!-- Admin-only link -->
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('delete') }}">Delete</a>
                 </li>
             </ul>
         </div>
