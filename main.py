@@ -151,34 +151,32 @@ def delete():
     
     return render_template('delete.html')
 
-@app.route('/update_item', methods=['GET', 'POST'])
+@app.route('/update_item', methods=['POST'])
 def update_item():
-    if request.method == 'POST':
-        itemID = request.form['itemID']
-        availability = request.form['availability']
-        borrower_name = request.form.get('borrower_name')
-        borrower_flatID = request.form.get('borrower_flatID')
+    itemID = request.form['itemID']
+    availability = request.form['availability']
+    borrower_name = request.form.get('borrower_name')
+    borrower_flatID = request.form.get('borrower_flatID')
 
-        conn, cursor = get_db_connection()
+    conn, cursor = get_db_connection()
 
-        # Check if member exists for the borrowing flat
+    # Only check for member existence if the item is being borrowed
+    if availability == 'Borrowed' and borrower_name and borrower_flatID:
         cursor.execute("SELECT * FROM members WHERE flatID = ? AND fname = ?", (borrower_flatID, borrower_name))
         existing_member = cursor.fetchone()
 
         # If the member doesn't exist, add them
-        if not existing_member and borrower_name and borrower_flatID:
+        if not existing_member:
             cursor.execute("INSERT INTO members (flatID, fname) VALUES (?, ?)", (borrower_flatID, borrower_name))
 
-        # Update the item's availability
-        cursor.execute("UPDATE items SET availability = ?, borrower_name = ?, borrower_flatID = ? WHERE itemID = ?",
-                       (availability, borrower_name, borrower_flatID, itemID))
+    # Update the item's availability and borrower details (if provided)
+    cursor.execute("UPDATE items SET availability = ?, borrower_name = ?, borrower_flatID = ? WHERE itemID = ?",
+                   (availability, borrower_name, borrower_flatID, itemID))
 
-        conn.commit()
-        conn.close()
+    conn.commit()
+    conn.close()
 
-        return redirect(url_for('home'))
-
-    return render_template("update_item.html")
+    return redirect(url_for('view_items'))  # Redirect back to items.html page
 
 if __name__ == '__main__':
     app.run(debug=True)

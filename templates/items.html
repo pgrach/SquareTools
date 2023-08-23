@@ -32,24 +32,22 @@
               {% endif %}
             </p>
             {% if item[5] == "Borrowed" %}
-            <button class="btn btn-secondary" onclick="toggleUpdateForm({{ loop.index }})">Return Item</button>
+            <button class="btn btn-secondary"
+              onclick="if(confirmReturn('{{ item[4] }}', '{{ item[8] }}', '{{ item[1] }}')) { toggleUpdateForm({{ loop.index }}); }">Return
+              </button>
             {% else %}
-            <button class="btn btn-secondary" onclick="toggleUpdateForm({{ loop.index }})">Borrow Item</button>
+            <button class="btn btn-secondary" onclick="toggleUpdateForm({{ loop.index }})">Borrow</button>
             {% endif %}
+
           </div>
 
           <!-- Update form hidden by default -->
           <div class="card-body update-form" id="update-form-{{ loop.index }}" style="display:none;">
             <form action="{{ url_for('update_item') }}" method="post">
               <input type="hidden" name="itemID" value="{{ item[0] }}">
-              <div class="form-group">
-                <label for="availability-{{ loop.index }}">Availability:</label>
-                <select class="form-control" name="availability" id="availability-{{ loop.index }}">
-                  <option value="Available">Available</option>
-                  <option value="Borrowed">Borrowed</option>
-                </select>
-              </div>
-              <div class="borrower-details" style="display:none;">
+              <input type="hidden" name="availability"
+                value="{% if item[5] == 'Borrowed' %}Available{% else %}Borrowed{% endif %}">
+              <div class="borrower-details" style="{% if item[5] == 'Borrowed' %}display:none;{% endif %}">
                 <div class="form-group">
                   <label for="borrower_name">Borrower Name:</label>
                   <input type="text" class="form-control" name="borrower_name">
@@ -97,6 +95,10 @@
         }
       });
     });
+
+    function confirmReturn(itemName, ownerName, flatID) {
+      return confirm(`Are you sure you are a borrower from flat Flat ${flatID} wishing to return ${itemName} to ${ownerName} from Flat ${flatID}?`);
+    }
   </script>
 
   <!-- Optional: jQuery library, Popper.js, and Bootstrap JS for some Bootstrap components like modals -->
