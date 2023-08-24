@@ -87,9 +87,21 @@ def view_members():
 @app.route("/items")
 def view_items():
   conn, cursor = get_db_connection()
+  # Integrating different search possibilities 
+  flatID = request.args.get('flatID') # Check if there's a flatID argument in the request
+  if flatID:
+        # Fetch items only for the specified flatID
+        # Join items table with members table to get the fname for item's owner
+        cursor.execute("""
+        SELECT items.*, members.fname 
+        FROM items
+        JOIN members ON items.memberID = members.memberID
+        WHERE items.flatID = ?
+        """, (flatID,))
 
-  # Join items table with members table to get the fname for each item's owner
-  cursor.execute("""
+  else:
+        # Fetch all items
+      cursor.execute("""
 SELECT items.*, members.fname 
 FROM items
 JOIN members ON items.memberID = members.memberID

@@ -4,11 +4,13 @@ body, h1, h2, h3, p {
     padding: 0;
 }
 
+
 body {
     font-family: 'Roboto', sans-serif;
     background-color: #f4f4f6;
     color: #333;
 }
+
 
 /* Brand Colors */
 :root {
@@ -16,6 +18,7 @@ body {
     --secondary-color: #D35400; /* Earthy Orange */
     --accent-color: #1ABC9C; /* Soft Green/Turquoise */
 }
+
 
 /* Navbar */
 .navbar {
