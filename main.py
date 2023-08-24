@@ -89,6 +89,10 @@ def view_items():
   conn, cursor = get_db_connection()
   # Integrating different search possibilities 
   flatID = request.args.get('flatID') # Check if there's a flatID argument in the request
+  availability = request.args.get('availability')
+  borrowed_by_flatID = request.args.get('borrowed_by_flatID')
+  class_filter = request.args.get('class')
+
   if flatID:
         # Fetch items only for the specified flatID
         # Join items table with members table to get the fname for item's owner
@@ -97,15 +101,48 @@ def view_items():
         FROM items
         JOIN members ON items.memberID = members.memberID
         WHERE items.flatID = ?
+        ORDER BY CASE WHEN items.availability = 'Available' THEN 1 ELSE 2 END, items.item_name
         """, (flatID,))
 
+  elif availability:
+        # Fetch items only for available
+        # Join items table with members table to get the fname for item's owner
+        cursor.execute("""
+        SELECT items.*, members.fname 
+        FROM items
+        JOIN members ON items.memberID = members.memberID
+        WHERE items.availability = ?
+        """, (availability,))
+        
+  elif borrowed_by_flatID:
+        # Fetch items only for the specified flatID
+        # Join items table with members table to get the fname for item's owner
+        cursor.execute("""
+        SELECT items.*, members.fname 
+        FROM items
+        JOIN members ON items.memberID = members.memberID
+        WHERE items.borrower_flatID = ?
+        """, (borrowed_by_flatID,))
+
+  elif class_filter:
+        # Fetch items only for the specified flatID
+        # Join items table with members table to get the fname for item's owner
+        cursor.execute("""
+        SELECT items.*, members.fname 
+        FROM items
+        JOIN members ON items.memberID = members.memberID
+        WHERE items.class = ?
+        ORDER BY CASE WHEN items.availability = 'Available' THEN 1 ELSE 2 END, items.item_name
+        """, (class_filter,))
+      
   else:
         # Fetch all items
       cursor.execute("""
-SELECT items.*, members.fname 
-FROM items
-JOIN members ON items.memberID = members.memberID
-""")
+        SELECT items.*, members.fname 
+        FROM items
+        JOIN members ON items.memberID = members.memberID
+        ORDER BY CASE WHEN items.availability = 'Available' THEN 1 ELSE 2 END, items.item_name
+        """)
   items = cursor.fetchall()
 #   print(items) #checking if JOIN works and defining the order
   conn.close()
