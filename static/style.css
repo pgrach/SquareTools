@@ -1,0 +1,80 @@
+/* Resetting some default styles for better cross-browser consistency */
+body, h1, h2, h3, p {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f4f4f6;
+    color: #333;
+}
+
+/* Brand Colors */
+:root {
+    --primary-color: #2C3E50; /* Navy Blue */
+    --secondary-color: #D35400; /* Earthy Orange */
+    --accent-color: #1ABC9C; /* Soft Green/Turquoise */
+}
+
+/* Navbar */
+.navbar {
+    background-color: var(--primary-color);
+}
+
+.navbar-light .navbar-brand, 
+.navbar-light .nav-link {
+    color: white;
+}
+
+.navbar-light .nav-link:hover, 
+.navbar-light .nav-link:focus {
+    color: var(--secondary-color);
+}
+
+/* Jumbotron */
+.jumbotron {
+    background-color: var(--secondary-color);
+    color: white;
+    padding: 2rem 1rem;
+}
+
+/* Buttons and CTAs */
+.btn-primary {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+}
+
+.btn-primary:hover, 
+.btn-primary:focus, 
+.btn-primary:active {
+    background-color: #16a085; /* Darkened version of --accent-color */
+    border-color: #16a085;
+}
+
+/* Blockquote */
+blockquote {
+    background-color: #e9ecef; /* Light gray */
+    padding: 1rem;
+    border-left: 4px solid var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+/* Enhancements for small screens */
+@media (max-width: 576px) {
+    body {
+        font-size: 0.9rem;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    h2 {
+        font-size: 1.7rem;
+    }
+
+    h3 {
+        font-size: 1.3rem;
+    }
+}
