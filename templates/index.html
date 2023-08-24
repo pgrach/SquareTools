@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -6,22 +5,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
-    <title>Squared_Share</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+        integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+    <title>Square Share - RS</title>
 </head>
 
 <body>
-
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <a class="navbar-brand" href="#">Square Share</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
-                <li class="nav-item active">
-                    <a class="nav-link" href="{{ url_for('view_items') }}">View All Items</a>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="itemsDropdown" role="button" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                        Items
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="itemsDropdown">
+                        <a class="dropdown-item" href="{{ url_for('view_items') }}">📦 View All Items</a>
+                        <a class="dropdown-item btn btn-primary text-white" href="{{ url_for('add_items') }}">➕ Add an
+                            Item</a>
+                    </div>
                 </li>
                 {% if request.args.get('secret_key') == 'MY_SECRET_123' %}
                 <li class="nav-item">
@@ -31,28 +35,64 @@
                     <a class="nav-link" href="{{ url_for('delete') }}?secret_key=MY_SECRET_123">Delete</a>
                 </li>
                 {% endif %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('add_items') }}">Add Items</a>
-                </li>
             </ul>
         </div>
     </nav>
-
-    <!-- Jumbotron -->
+    <!-- Main Content -->
     <div class="container mt-5">
+        <!-- Jumbotron -->
         <div class="jumbotron">
-            <h1 class="display-4">Welcome to Square Share!</h1>
-            <p class="lead">Join our Яed Sq community for sharing and borrowing items</p>
-            <hr class="my-4">
-            <p>Click below to add an item you can share with the community.</p>
-            <a class="btn btn-primary btn-lg" href="{{ url_for('add_items') }}" role="button">Add Item</a>
+            <h1 class="display-4">Hello, Neighbours! Let's Share.</h1>
+            <p class="lead">Have something collecting dust? Why keep items idle? Your neighbors might need them! Share
+                what you have and find what you need right here in our community</p>
+            <a class="btn btn-primary btn-lg mb-3" href="{{ url_for('add_items') }}" role="button">➕ Add an Item</a>
+            <p>Or looking for something for a day or two? See what's on offer from the flat next door!</p>
+            <a class="btn btn-outline-secondary btn-lg mb-3" href="{{ url_for('view_items') }}" role="button">📦 View
+                All Items</a>
+            <p>See something you like? Just click "borrow" and knock on their door. Want to share? Simply add your item
+                and meet your neighbour.</p>
         </div>
     </div>
 
+    <!-- My Items Section -->
+
+    <div class="card mb-5">
+        <div class="card-body">
+            <h5 class="card-title">See what you've shared:</h5>
+            <div class="input-group mb-3">
+                <input type="number" class="form-control" placeholder="Enter your Flat#" aria-label="Flat number">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-primary" type="button">👁️‍🗨️ View My Items</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Testimonials or Highlighted Shares -->
+    <div>
+        <h4>What our neighbors are saying:</h4>
+        <blockquote class="blockquote">
+            <p class="mb-0">"This platform has made sharing so much easier!"</p>
+            <footer class="blockquote-footer">Simone from Flat# 54</footer>
+        </blockquote>
+        <blockquote class="blockquote">
+            <p class="mb-0">"I shared my lawn mower and met two new friends in the process!"</p>
+            <footer class="blockquote-footer">Pavel from Flat# 54</footer>
+        </blockquote>
+    </div>
+    </div>
+
+
     <!-- Optional: jQuery library, Popper.js, and Bootstrap JS for some Bootstrap components like modals -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js"
+        integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s"
+        crossorigin="anonymous"></script>
 </body>
 
 </html>
