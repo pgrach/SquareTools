@@ -11,67 +11,54 @@ p {
 
 body {
     font-family: 'Roboto', sans-serif;
-    background-color: #f4f4f6;
-    color: #333;
+    background-color: #f7f8fa;
 }
 
-
-/* Brand Colors */
-:root {
-    --primary-color: #2C3E50;
-    /* Navy Blue */
-    --secondary-color: #D35400;
-    /* Earthy Orange */
-    --accent-color: #1ABC9C;
-    /* Soft Green/Turquoise */
-}
-
-
-/* Navbar */
 .navbar {
-    background-color: var(--primary-color);
+    border-bottom: 1px solid #e7e7e7;
 }
 
-.navbar-light .navbar-brand,
-.navbar-light .nav-link {
-    color: white;
+.nav-link {
+    font-weight: 500;
 }
 
-.navbar-light .nav-link:hover,
-.navbar-light .nav-link:focus {
-    color: var(--secondary-color);
-}
-
-/* Jumbotron */
 .jumbotron {
-    background-color: var(--secondary-color);
-    color: white;
-    padding: 2rem 1rem;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
 }
 
-/* Buttons and CTAs */
-.btn-primary {
-    background-color: var(--accent-color);
-    border-color: var(--accent-color);
+.card {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
 }
 
-.btn-primary:hover,
-.btn-primary:focus,
-.btn-primary:active {
-    background-color: #16a085;
-    /* Darkened version of --accent-color */
-    border-color: #16a085;
+.container h4 {
+    margin-top: 30px;
+    margin-bottom: 20px;
+    font-weight: 600;
 }
 
-/* Blockquote */
-blockquote {
-    background-color: #e9ecef;
-    /* Light gray */
-    padding: 1rem;
-    border-left: 4px solid var(--primary-color);
-    margin-bottom: 1rem;
+.blockquote {
+    background-color: #f1f2f4;
+    padding: 15px 20px;
+    border-left: 5px solid #007bff; /* You can adjust this color to fit your desired theme */
+    border-radius: 8px;
 }
 
+blockquote .mb-0 {
+    font-weight: 500;
+}
+
+blockquote .blockquote-footer {
+    font-weight: 400;
+}
+
+.input-group {
+    max-width: 400px;
+    margin: 0 auto;
+}
 .card-img-top {
     width: 100%;
     /* take full width of parent */
@@ -82,6 +69,21 @@ blockquote {
     background-color: #f8f9fa;
     /* placeholder color in case there's no image */
 }
+
+.available {
+    background-color: #DFFFD6;
+    /* Light green background */
+    border: 1px solid #4CAF50;
+    /* Green border */
+}
+
+.borrowed {
+    background-color: #FFD6D6;
+    /* Light red background */
+    border: 1px solid #F44336;
+    /* Red border */
+}
+
 
 /* Enhancements for small screens */
 @media (max-width: 576px) {

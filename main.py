@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for
 from werkzeug.utils import secure_filename
 import os
+from PIL import Image
 
 # created an instance of the Flask application 
 app = Flask(__name__)
@@ -147,6 +148,22 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+# Define a function to resize an image
+def resize_image(image, base_width=300):
+    """Resize an image preserving its aspect ratio.
+    
+    Args:
+        image (PIL.Image): Image to be resized.
+        base_width (int): The base width to resize to. 
+                          The height will be adjusted to maintain the aspect ratio.
+
+    Returns:
+        PIL.Image: Resized image.
+    """
+    w_percent = base_width / float(image.size[0])
+    h_size = int(float(image.size[1]) * float(w_percent))
+    return image.resize((base_width, h_size))
+
 @app.route("/add_items", methods=["GET", "POST"])
 def add_items():
     if request.method == "POST":
@@ -189,8 +206,16 @@ def add_items():
             if file.filename != '' and allowed_file(file.filename):
                 extension = file.filename.rsplit('.', 1)[1].lower()  # Get the file extension
                 new_filename = f"{itemID}.{extension}"  # Rename file to itemID.extension
+                
+                # Load the image using Pillow
+                image = Image.open(file)
+
+                # Resize the image
+                image_resized = resize_image(image)
+
+                # Save the resized image
                 file_path = os.path.join(app.config['UPLOAD_FOLDER'], new_filename)
-                file.save(file_path)
+                image_resized.save(file_path)
 
                 # Update the items table with the image filename
                 cursor.execute("UPDATE items SET image_filename = ? WHERE itemID = ?", (new_filename, itemID))

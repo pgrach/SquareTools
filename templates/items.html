@@ -17,7 +17,7 @@
 
 <body>
   <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <nav class="navbar navbar-expand-lg navbar-light">
     <a class="navbar-brand" href="{{ url_for('home') }}">Square Share</a>
 
     <ul class="navbar-nav mr-auto">
@@ -88,7 +88,14 @@
     <div class="row mt-4">
       {% for item in items %}
       <div class="col-md-4 mb-4">
-        <div class="card">
+        <!-- Color-code cards based on item availability -->
+        <div class="card {% if item[5] == "Borrowed" %}borrowed{% else %}available{% endif %}">
+          
+          <!-- Add the badge highhlighting the status  -->
+          <div class="card-header">
+            <span class="badge {% if item[5] == "Borrowed" %}badge-danger{% else %}badge-success{% endif %}">{{ item[5] }}</span>
+          </div>
+
           <!-- Display item details here -->
           {% if item[8] and item[8] != "" %}
           <img class="card-img-top" src="{{ url_for('static', filename='uploads/' + item[8]) }}" alt="Item Image"
@@ -113,8 +120,7 @@
               Owner: {{ item[9] }} (Flat {{ item[1] }})<br>
               <!-- Display SVG Icon based on Category -->
               <img src="{{ url_for('static', filename='svg_icons/' + item[3] + '.svg') }}" alt="{{ item[3] }} icon"
-                width="20" height="20"> Category: {{ item[3] }}<br>
-              Availability: {{ item[5] }}
+                width="20" height="20"> {{ item[3] }}<br>
               {% if item[5] == "Borrowed" %}
               <br>Borrowed By: {{ item[6] }} (Flat {{ item[7] }})
               {% endif %}
