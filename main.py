@@ -86,67 +86,54 @@ def view_members():
 
 @app.route("/items")
 def view_items():
-  conn, cursor = get_db_connection()
-  # Integrating different search possibilities 
-  flatID = request.args.get('flatID') # Check if there's a flatID argument in the request
-  availability = request.args.get('availability')
-  borrowed_by_flatID = request.args.get('borrowed_by_flatID')
-  class_filter = request.args.get('class')
+    conn, cursor = get_db_connection()
 
-  if flatID:
-        # Fetch items only for the specified flatID
-        # Join items table with members table to get the fname for item's owner
-        cursor.execute("""
+    # allow for combinations of filters. building the SQL query and values
+    query = """
         SELECT items.*, members.fname 
         FROM items
         JOIN members ON items.memberID = members.memberID
-        WHERE items.flatID = ?
-        ORDER BY CASE WHEN items.availability = 'Available' THEN 1 ELSE 2 END, items.item_name
-        """, (flatID,))
+        WHERE 1=1
+    """
+    values = []
 
-  elif availability:
-        # Fetch items only for available
-        # Join items table with members table to get the fname for item's owner
-        cursor.execute("""
-        SELECT items.*, members.fname 
-        FROM items
-        JOIN members ON items.memberID = members.memberID
-        WHERE items.availability = ?
-        """, (availability,))
-        
-  elif borrowed_by_flatID:
-        # Fetch items only for the specified flatID
-        # Join items table with members table to get the fname for item's owner
-        cursor.execute("""
-        SELECT items.*, members.fname 
-        FROM items
-        JOIN members ON items.memberID = members.memberID
-        WHERE items.borrower_flatID = ?
-        """, (borrowed_by_flatID,))
+    # Check item_filter and flatID_filter values
+    item_filter = request.args.get('item_filter')
+    flatID_filter = request.args.get('flatID_filter')
 
-  elif class_filter:
-        # Fetch items only for the specified flatID
-        # Join items table with members table to get the fname for item's owner
-        cursor.execute("""
-        SELECT items.*, members.fname 
-        FROM items
-        JOIN members ON items.memberID = members.memberID
-        WHERE items.class = ?
-        ORDER BY CASE WHEN items.availability = 'Available' THEN 1 ELSE 2 END, items.item_name
-        """, (class_filter,))
-      
-  else:
-        # Fetch all items
-      cursor.execute("""
-        SELECT items.*, members.fname 
-        FROM items
-        JOIN members ON items.memberID = members.memberID
-        ORDER BY CASE WHEN items.availability = 'Available' THEN 1 ELSE 2 END, items.item_name
-        """)
-  items = cursor.fetchall()
-#   print(items) #checking if JOIN works and defining the order
-  conn.close()
-  return render_template("items.html", items=items)
+    if item_filter == 'borrower' and flatID_filter:
+        query += " AND items.borrower_flatID = ?"
+        values.append(flatID_filter)
+
+    elif item_filter == 'owner' and flatID_filter:
+        query += " AND items.flatID = ?"
+        values.append(flatID_filter)
+
+    # filters to the query based on provided parameters
+    if request.args.get('flatID'):
+        query += " AND items.flatID = ?"
+        values.append(request.args.get('flatID'))
+
+    if request.args.get('availability'):
+        query += " AND items.availability = ?"
+        values.append(request.args.get('availability'))
+
+    if request.args.get('borrowed_by_flatID'):
+        query += " AND items.borrower_flatID = ?"
+        values.append(request.args.get('borrowed_by_flatID'))
+
+    if request.args.get('class'):
+        query += " AND items.class = ?"
+        values.append(request.args.get('class'))
+
+    # Add ordering to the query
+    query += " ORDER BY CASE WHEN items.availability = 'Available' THEN 1 ELSE 2 END, items.item_name"
+    
+    cursor.execute(query, tuple(values))
+    items = cursor.fetchall()
+    
+    conn.close()
+    return render_template("items.html", items=items)
 
 # add a new item to the db
 

@@ -12,7 +12,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Roboto:wght@400;700&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="/static/style.css">
-    <title>Square Share - Items</title>
+  <title>Square Share - Items</title>
 </head>
 
 <body>
@@ -20,34 +20,54 @@
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="{{ url_for('home') }}">Square Share</a>
 
-    <!-- Search Bar -->
-    <form class="form-inline my-2 my-lg-0 mr-auto" action="{{ url_for('view_items') }}" method="get">
-      <!-- Borrowed/Available Filter -->
-      <select class="custom-select mr-2" name="availability">
-        <option value="">All</option>
-        <option value="Available">Available</option>
-        <option value="Borrowed">Borrowed</option>
-      </select>
-
-      <!-- Borrowed by FlatID Filter -->
-      <input class="form-control mr-2" type="number" name="borrowed_by_flatID" placeholder="Borrowed by FlatID" min="1"
-        max="144">
-
-      <!-- Owner FlatID Filter -->
-      <input class="form-control mr-2" type="number" name="flatID" placeholder="Owner FlatID" min="1" max="144">
-
-      <!-- Class Filter -->
-      <select class="custom-select mr-2" name="class">
-        <option value="">All Classes</option>
-        <option value="Electronics">Electronics</option>
-        <option value="Furniture">Furniture</option>
-        <option value="Tools">Tools</option>
-        <option value="Cookware">Cookware</option>
-        <option value="OTHER">OTHER</option>
-      </select>
-
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Filter</button>
-    </form>
+    <ul class="navbar-nav mr-auto">
+      <!-- Filter Dropdown -->
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="filterDropdown" role="button" data-toggle="dropdown"
+          aria-haspopup="true" aria-expanded="false">
+          Filters
+        </a>
+        <div class="dropdown-menu" aria-labelledby="filterDropdown">
+          <form class="px-4 py-3" action="{{ url_for('view_items') }}" method="get">
+            <!-- Borrowed/Available Filter -->
+            <div class="form-group">
+              <label for="availability">Availability:</label>
+              <select class="form-control" name="availability">
+                <option value="">All</option>
+                <option value="Available">Available</option>
+                <option value="Borrowed">Borrowed</option>
+              </select>
+            </div>
+            <!-- Borrower/Owner Filter -->
+            <div class="form-group">
+              <label for="item_filter">Borrower/Owner:</label>
+              <select class="form-control" name="item_filter">
+                <option value="borrower">Borrower</option>
+                <option value="owner">Owner</option>
+              </select>
+            </div>
+            <!-- FlatID Filter -->
+            <div class="form-group">
+              <label for="flatID_filter">Flat ID:</label>
+              <input class="form-control" type="number" name="flatID_filter" placeholder="FlatID" min="1" max="144">
+            </div>
+            <!-- Class Filter -->
+            <div class="form-group">
+              <label for="class">Class:</label>
+              <select class="form-control" name="class">
+                <option value="">All Classes</option>
+                <option value="Electronics">Electronics</option>
+                <option value="Furniture">Furniture</option>
+                <option value="Tools">Tools</option>
+                <option value="Cookware">Cookware</option>
+                <option value="OTHER">OTHER</option>
+              </select>
+            </div>
+            <button class="btn btn-success" type="submit">Apply Filters</button>
+          </form>
+        </div>
+      </li>
+    </ul>
 
     <!-- Other Navbar Items -->
     <ul class="navbar-nav">
