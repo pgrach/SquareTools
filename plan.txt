@@ -11,3 +11,21 @@ Resource Sharing Platform
 An application to facilitate the sharing of resources among residents: starting with sharing tools, appliances, or other equipment.
 Later we can potentially build a car pooling system amongst neighbours.
 
+TO DO LIST:
+
+(1) DONE_"Add Items" and "View All Items" should be grouped under a "Items" dropdown menu. But if i group them, then there is just one link in the navbar.
+(2) So far the focus is on items sharing/borrowing which is the most important. Maybe as a next step I could add platform members statistics: borrowing activity, times borrowed, nr of items stored,
+(3) adding a footer for additional links or information (maybe description of "good sharing practices"?)
+(4) "Go BACK to MAIN MENU" link can be integrated into the main navigation bar
+(5) Table navigation: Using icons or color coding help users identify borrowed and available items quickly.
+(6) Actions buttons UI for return/borrow/add to enhance with color or icons.
+(7) DONE_Add My Items (which is basically search selecting flat number)
+(8) Optimization: As the platform grows, might consider lazy loading images or paginating the "View All Items" page to ensure faster load times.
+
+
+
+
+
+
+
+

@@ -223,7 +223,7 @@ def add_items():
         conn.commit()
         conn.close()
 
-        return redirect(url_for('home'))  # Redirect to the main page after adding
+        return redirect(url_for('view_items'))  # Redirect to the main page after adding
     return render_template("add_items.html")  # Render the form when the request method is "GET"
 
 @app.route('/delete', methods=['GET', 'POST'])
