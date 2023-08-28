@@ -1,10 +1,11 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, flash, session
 from werkzeug.utils import secure_filename
 import os
 from PIL import Image
 
 # created an instance of the Flask application 
 app = Flask(__name__)
+app.secret_key = 'RS1234SecretKey'
 
 import sqlite3 as sql
 
@@ -189,6 +190,7 @@ def add_items():
         if not existing_member:
             cursor.execute("INSERT INTO members (flatID, fname) VALUES (?, ?)", (flat, fname))
             memberID = cursor.lastrowid  # Fetch the ID of the member you just added
+            flash(f'Welcome to the community, {fname}!')  # Flash the welcome message here
 
         else:
             memberID = existing_member[1]  # Fetch the memberID of the existing member
@@ -268,6 +270,7 @@ def update_item():
     availability = request.form['availability']
     borrower_name = request.form.get('borrower_name')
     borrower_flatID = request.form.get('borrower_flatID')
+    borrower_name = request.form["borrower_name"] # this is for welcome slash message
 
     conn, cursor = get_db_connection()
 
@@ -279,6 +282,7 @@ def update_item():
         # If the member doesn't exist, add them
         if not existing_member:
             cursor.execute("INSERT INTO members (flatID, fname) VALUES (?, ?)", (borrower_flatID, borrower_name))
+            flash(f'Welcome to the community, {borrower_name}!')  # Flash the welcome message here
 
     # Update the item's availability and borrower details (if provided)
     cursor.execute("UPDATE items SET availability = ?, borrower_name = ?, borrower_flatID = ? WHERE itemID = ?",
