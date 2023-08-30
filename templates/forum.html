@@ -10,13 +10,26 @@
     <link rel="stylesheet" href="/static/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Roboto:wght@400;700&display=swap"
         rel="stylesheet">
-    <title>Square Share - RS</title>
+    <script src="/static/script.js" defer></script>
+    <title>Square Share - Q&A</title>
 </head>
 
 <body>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <div id="flash-message">
+        {% for message in messages %}
+        <div class="alert alert-success" role="alert">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light">
-        <a class="navbar-brand" href="#">Square Share</a>
+        <a class="navbar-brand" href="{{ url_for('home') }}">Square Share</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -46,55 +59,57 @@
                     <a class="nav-link" href="{{ url_for('forum') }}">Q&A</a>
                 </li>
             </ul>
-        </div>
+
     </nav>
+
     <!-- Main Content -->
     <div class="container mt-5">
-        <!-- Jumbotron -->
-        <div class="jumbotron">
-            <h1 class="display-4">Hello, Neighbours! Let's Share.</h1>
-            <p class="lead">Have something collecting dust? Why keep items idle? Your neighbours might need them! </p>
-            <a class="btn btn-primary btn-lg mb-3" href="{{ url_for('add_items') }}" role="button">➕ Add an Item</a>
-            <p>Or looking for something for a day or two? See what's on offer from the flat next door!</p>
-            <a class="btn btn-outline-secondary btn-lg mb-3" href="{{ url_for('view_items') }}" role="button">📦 View
-                All Items</a>
-            <p>See something you like? Just click "borrow" and knock on their door. Want to share? Simply add your item
-                and meet your neighbour.</p>
-        </div>
+        <h1>What is this section for </h1>
+        <p>Here you can ask admin to remove your item, report any issue, or just provide any feedback or ask questions.
+            We are evolving and try to adjust the platform according to the neighbours needs </p>
+    </div>
+    <!-- Feedback Form -->
+    <div class="mt-4">
+        <h2>Submit Your Feedback or Request</h2>
+        <form action="/forum" method="post">
+            <div class="form-group">
+                <label for="title">Subject:</label>
+                <input type="text" class="form-control" id="title" name="title" required>
+            </div>
+            <div class="form-group">
+                <label for="message">Message:</label>
+                <textarea class="form-control" id="message" name="message" rows="4" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="flat_number">Flat Number:</label>
+                <input type="number" class="form-control" id="flat_number" name="flat_number" min="1" max="144"
+                    required>
+            </div>
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" class="form-control" id="name" name="name" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
     </div>
 
-    <!-- My Items Section -->
-
-    <div class="card mb-5">
-        <div class="card-body">
-            <h5 class="card-title">See what you've shared:</h5>
-            <form action="{{ url_for('view_items') }}" method="get">
-                <div class="input-group mb-3">
-                    <input type="number" name="flatID" class="form-control" placeholder="Enter your Flat#"
-                        aria-label="Flat number">
-                    <div class="input-group-append">
-                        <button class="btn btn-outline-primary" type="submit">👁️‍🗨️ View My Items</button>
-                    </div>
-                </div>
-            </form>
-        </div>
+    <!-- Feedback List for All Users -->
+    <div class="mt-5">
+        <h2>All Feedback & Requests</h2>
+        <ul>
+            {% for feedback in feedback_list %}
+            <li>
+                {{ feedback.title }} - {{ feedback.message }} | {{ feedback.fname }} | Flat {{ feedback.flatID }}
+            </li>
+            {% endfor %}
+        </ul>
     </div>
 
-    <!-- Testimonials or Highlighted Shares -->
-    <div>
-        <h4>What our neighbors are saying:</h4>
-        <blockquote class="blockquote">
-            <p class="mb-0">"This platform has made sharing so much easier!"</p>
-            <footer class="blockquote-footer">Simone from Flat# 54</footer>
-        </blockquote>
-        <blockquote class="blockquote">
-            <p class="mb-0">"I shared my lawn mower and met two new friends in the process!"</p>
-            <footer class="blockquote-footer">Pavel from Flat# 54</footer>
-        </blockquote>
-    </div>
-    </div>
-
-
+    <li class="list-group-item">
+        <strong>Test Title</strong> - Test Message <br>
+        <small>Submitted by Test Name from Flat 123</small>
+    </li>    
+    
     <!-- Optional: jQuery library, Popper.js, and Bootstrap JS for some Bootstrap components like modals -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
         integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"

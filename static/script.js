@@ -1,3 +1,5 @@
+// Script for the flash welcome message when a new member created:
+ 
 window.onload = function() {
     const flashMessage = document.getElementById("flash-message");
     if (flashMessage) {

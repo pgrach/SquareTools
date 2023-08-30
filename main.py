@@ -53,6 +53,18 @@ FOREIGN KEY (flatID) REFERENCES flats (flatID),
 FOREIGN KEY (memberID) REFERENCES members (memberID)
 )""")
 
+# Create a table named "feedback" with columns
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS "feedback" (
+"ID" INTEGER PRIMARY KEY AUTOINCREMENT,
+"title" VARCHAR (50),
+"message" VARCHAR (500),
+"flatID" INTEGER NOT NULL,
+"fname" TEXT NOT NULL,
+FOREIGN KEY (flatID) REFERENCES members (flatID),
+FOREIGN KEY (fname) REFERENCES members (fname)
+)""")
+
 # Create the items table
 conn.commit()
 conn.close()
@@ -292,6 +304,75 @@ def update_item():
     conn.close()
 
     return redirect(url_for('view_items'))  # Redirect back to items.html page
+
+
+# # Define a Function to retrieve all feedback entries
+# def get_all_feedback():
+#     conn, cursor = get_db_connection()
+#     cursor.execute("SELECT * FROM feedback ORDER BY ID DESC")
+#     feedback = cursor.fetchall()
+#     conn.close()
+#     print(feedback)  # Add this line
+#     return feedback
+
+
+# Define a Function to delete feedback by ID
+def delete_feedback_by_id(feedback_id):
+    conn, cursor = get_db_connection()
+    cursor.execute("DELETE FROM feedback WHERE ID = ?", (feedback_id,))
+    conn.commit()
+    conn.close()
+
+# Flask View Function to handle the Q&A forum
+@app.route('/forum', methods=["GET", "POST"])
+def forum():
+    conn, cursor = get_db_connection()
+
+    if request.method == "POST":
+        title = request.form["title"]
+        message = request.form["message"]
+        name = request.form["name"]
+        flat_number = request.form["flat_number"]
+
+        # Check if the flat already exists, if not insert
+        cursor.execute("SELECT * FROM flats WHERE flatID = ?", (flat_number,))
+        existing_flat = cursor.fetchone()
+        if not existing_flat:
+            cursor.execute("INSERT INTO flats (flatID) VALUES (?)", (flat_number,))
+
+        # Check if a member with the same name exists in the same flat
+        cursor.execute("SELECT * FROM members WHERE flatID = ? AND fname = ?", (flat_number, name))
+        existing_member = cursor.fetchone()
+
+        # If the member doesn't exist, add them
+        if not existing_member:
+            cursor.execute("INSERT INTO members (flatID, fname) VALUES (?, ?)", (flat_number, name))
+            flash(f'Welcome to the community, {name}!')  # Flash the welcome message here
+
+        # Add feedback to the database
+        cursor.execute("INSERT INTO feedback (title, message, flatID, fname) VALUES (?, ?, ?, ?)", (title, message, flat_number, name))
+        conn.commit()
+
+        flash("Your feedback has been submitted!")
+        return redirect(url_for('forum'))
+
+    cursor.execute("SELECT * FROM feedback ORDER BY ID DESC")
+    feedback_list = cursor.fetchall()
+    conn.close()
+
+    return render_template('forum.html', feedback_list=feedback_list)
+
+# Flask View Function for Admin to delete specific feedback
+@app.route('/delete_feedback/<int:feedback_id>')
+def delete_feedback(feedback_id):
+    secret_key = request.args.get('secret_key')
+    if secret_key != SECRET_KEY_VALUE:
+        flash("You are not authorized to perform this action!")
+        return redirect(url_for('forum'))
+    delete_feedback_by_id(feedback_id)
+    flash("Feedback has been deleted.")
+    return redirect(url_for('forum'))
+
 
 if __name__ == '__main__':
     app.run(debug=True)
