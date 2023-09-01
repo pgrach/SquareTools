@@ -63,13 +63,33 @@
     </nav>
 
     <!-- Main Content -->
-    <div class="container mt-5">
-        <h1>What is this section for </h1>
-        <p>Here you can ask admin to remove your item, report any issue, or just provide any feedback or ask questions.
-            We are evolving and try to adjust the platform according to the neighbours needs </p>
+    <div class="container mt-5 intro-section">
+        <h1>Hello Neighbor!</h1>
+        <p>Welcome to our Q&A corner. Think of this space as our virtual meeting spot, where we all come
+            together to share thoughts, ask questions, or simply catch up. As our neighborhood evolves, so does Square
+            Share, and your voice helps shape our platform.</p>
+
+        <h2>Why No Sign-In?</h2>
+        <p>We've designed Square Share to be as accessible as possible. Since we're all neighbors here, we wanted to
+            create a space that feels open and welcoming, just like our community. No sign-ins mean less hassle and more
+            focus on what really matters—helping each other.</p>
+
+        <h2>A Few Friendly Reminders:</h2>
+        <ul>
+            <li><strong>Item Removals:</strong> Need to take something off? Just mention the item name, your flat
+                number, and a brief why. We'll handle the rest.</li>
+            <li><strong>Details Matter:</strong> The more specific you can be, the easier it is for us to understand and
+                act on your feedback.</li>
+            <li><strong>Keep it Neighborly:</strong> We all share this space, so let's keep our comments kind and
+                constructive. Remember, you might bump into someone at the next block party!</li>
+            <li><strong>Questions:</strong> Got a query? Someone might have had the same thought. Have a quick look at
+                previous Q&As before dropping yours.</li>
+        </ul>
+        <p>Thanks for being an active part of our digital neighborhood. Let's keep making Square Share a great place for
+            all of us!</p>
     </div>
     <!-- Feedback Form -->
-    <div class="mt-4">
+    <div class="mt-4 feedback-form">
         <h2>Submit Your Feedback or Request</h2>
         <form action="/forum" method="post">
             <div class="form-group">
@@ -98,7 +118,7 @@
         <h2>All Feedback & Requests</h2>
         <ul>
             {% for feedback in feedback_list %}
-            <li class="list-group-item">
+            <li class="list-group-item feedback-item">
                 <strong>{{ feedback[1] }}</strong> - {{ feedback[2] }} <br>
                 <small>Submitted by {{ feedback[4] }} from Flat {{ feedback[3] }}</small>
             </li>
