@@ -98,18 +98,15 @@
         <h2>All Feedback & Requests</h2>
         <ul>
             {% for feedback in feedback_list %}
-            <li>
-                {{ feedback.title }} - {{ feedback.message }} | {{ feedback.fname }} | Flat {{ feedback.flatID }}
+            <li class="list-group-item">
+                <strong>{{ feedback[1] }}</strong> - {{ feedback[2] }} <br>
+                <small>Submitted by {{ feedback[4] }} from Flat {{ feedback[3] }}</small>
             </li>
             {% endfor %}
+
         </ul>
     </div>
 
-    <li class="list-group-item">
-        <strong>Test Title</strong> - Test Message <br>
-        <small>Submitted by Test Name from Flat 123</small>
-    </li>    
-    
     <!-- Optional: jQuery library, Popper.js, and Bootstrap JS for some Bootstrap components like modals -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
         integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"

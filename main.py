@@ -359,7 +359,7 @@ def forum():
     cursor.execute("SELECT * FROM feedback ORDER BY ID DESC")
     feedback_list = cursor.fetchall()
     conn.close()
-
+    
     return render_template('forum.html', feedback_list=feedback_list)
 
 # Flask View Function for Admin to delete specific feedback
