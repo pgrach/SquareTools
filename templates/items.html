@@ -104,11 +104,11 @@
       {% for item in items %}
       <div class="col-md-4 mb-4">
         <!-- Color-code cards based on item availability -->
-        <div class="card {% if item[5] == " Borrowed" %}borrowed{% else %}available{% endif %}">
+        <div class="card {% if item[5].strip() == "Borrowed" %}borrowed{% else %}available{% endif %}">
 
           <!-- Add the badge highhlighting the status  -->
           <div class="card-header">
-            <span class="badge {% if item[5] == " Borrowed" %}badge-danger{% else %}badge-success{% endif %}">{{ item[5]
+            <span class="badge {% if item[5].strip() == "Borrowed" %}badge-danger{% else %}badge-success{% endif %}">{{ item[5]
               }}</span>
           </div>
 
